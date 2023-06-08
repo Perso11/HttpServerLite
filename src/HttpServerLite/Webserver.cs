@@ -257,12 +257,12 @@ namespace HttpServerLite
         /// <summary>
         /// Start accepting new connections.
         /// </summary>
-        public void Start()
+        public void Start(bool loadRoutes = true)
         {
             if (_TcpServer == null) throw new ObjectDisposedException("Webserver has been disposed.");
             if (_TcpServer.IsListening) throw new InvalidOperationException("Webserver is already running.");
 
-            LoadRoutes();
+            if(loadRoutes) LoadRoutes();
 
             _TcpServer.Start();
 
