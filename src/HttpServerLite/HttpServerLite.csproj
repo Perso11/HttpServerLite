@@ -2,17 +2,17 @@
 
 	<PropertyGroup>
 		<TargetFrameworks>netstandard2.1;netcoreapp3.1;net461;net48;net6.0;net7.0</TargetFrameworks>
-		<Version>2.0.2</Version>
-		<Authors>Joel Christner</Authors>
-		<Company>Joel Christner</Company>
+		<Version>2.0.3</Version>
+		<Authors>Joel Christner, Melvyn PRIAM</Authors>
+		<Company></Company>
 		<Product>HttpServerLite</Product>
 		<Description>User-space HTTP and HTTPS server without http.sys written in C#.  Please visit the project site README for details on implementation.</Description>
 		<PackageLicenseFile>LICENSE.md</PackageLicenseFile>
-		<PackageProjectUrl>https://github.com/jchristn/httpserverlite</PackageProjectUrl>
-		<RepositoryUrl>https://github.com/jchristn/httpserverlite</RepositoryUrl>
+		<PackageProjectUrl>https://github.com/Perso11/HttpServerLite</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/Perso11/HttpServerLite</RepositoryUrl>
 		<RepositoryType>Github</RepositoryType>
 		<PackageTags>http https server rest restful api async</PackageTags>
-		<PackageReleaseNotes>Breaking change moving to name value collections</PackageReleaseNotes>
+		<PackageReleaseNotes></PackageReleaseNotes>
 		<PackageIconUrl></PackageIconUrl>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 		<PackageIcon>icon.png</PackageIcon>
@@ -110,5 +110,6 @@
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
 	</ItemGroup>
+
 
 </Project>

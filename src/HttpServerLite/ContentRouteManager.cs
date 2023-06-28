@@ -70,10 +70,31 @@ namespace HttpServerLite
         }
 
         /// <summary>
-        /// Remove a route.
+        /// Add a route.
         /// </summary>
-        /// <param name="path">URL path.</param>
-        public void Remove(string path)
+        /// <param name="route"></param>
+        /// <exception cref="ArgumentNullException"></exception>
+		public void Add(ContentRoute route) {
+			if (route == null) throw new ArgumentNullException(nameof(route));
+
+			route.Path = route.Path.ToLower();
+			if (!route.Path.StartsWith("/")) route.Path = "/" + route.Path;
+			if (route.IsDirectory && !route.Path.EndsWith("/")) route.Path = route.Path + "/";
+
+			if (Exists(route.Path)) {
+				return;
+			}
+
+			lock (_Lock) {
+				_Routes.Add(route);
+			}
+		}
+
+		/// <summary>
+		/// Remove a route.
+		/// </summary>
+		/// <param name="path">URL path.</param>
+		public void Remove(string path)
         {
             if (String.IsNullOrEmpty(path)) throw new ArgumentNullException(nameof(path));
 
@@ -152,25 +173,6 @@ namespace HttpServerLite
         #endregion
 
         #region Private-Methods
-
-        private void Add(ContentRoute route)
-        {
-            if (route == null) throw new ArgumentNullException(nameof(route));
-
-            route.Path = route.Path.ToLower();
-            if (!route.Path.StartsWith("/")) route.Path = "/" + route.Path;
-            if (route.IsDirectory && !route.Path.EndsWith("/")) route.Path = route.Path + "/";
-
-            if (Exists(route.Path))
-            {
-                return;
-            }
-
-            lock (_Lock)
-            {
-                _Routes.Add(route);
-            }
-        }
 
         private void Remove(ContentRoute route)
         {

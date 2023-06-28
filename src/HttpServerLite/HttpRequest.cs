@@ -150,6 +150,8 @@ namespace HttpServerLite
 
         /// <summary>
         /// Retrieve the request body as a string.  This will fully read the stream.
+        /// <br></br>
+        /// This method end at the end of the stream ! !
         /// </summary>
         [JsonIgnore]
         public string DataAsString
@@ -159,8 +161,9 @@ namespace HttpServerLite
                 if (_DataAsBytes != null) return Encoding.UTF8.GetString(_DataAsBytes);
                 if (Data != null && ContentLength > 0)
                 {
-                    _DataAsBytes = ReadStreamFully(Data);
-                    if (_DataAsBytes != null) return Encoding.UTF8.GetString(_DataAsBytes);
+					//_DataAsBytes = ReadStreamFully(Data); MODIFIED
+					_DataAsBytes = ReadStreamSize(Data, ContentLength);
+					if (_DataAsBytes != null) return Encoding.UTF8.GetString(_DataAsBytes);
                 }
                 return null;
             }
@@ -555,6 +558,28 @@ namespace HttpServerLite
                 byte[] ret = ms.ToArray();
                 return ret;
             }
+        }
+
+        private byte[] ReadStreamSize(Stream input, long length) {
+            if (input == null) throw new ArgumentNullException(nameof(input));
+            if (!input.CanRead) throw new InvalidOperationException("Input stream is not readable");
+
+            byte[] buffer = new byte[16 * 1024];
+            long remaining = length;
+
+            using (MemoryStream ms = new MemoryStream()) {
+                int read;
+
+				while ((read = input.Read(buffer, 0, buffer.Length)) > 0) {
+					ms.Write(buffer, 0, read);
+                    remaining -= read;
+                    if(remaining <= 0) break;
+				}
+
+				byte[] ret = ms.ToArray();
+				return ret;
+
+			}
         }
 
         #endregion

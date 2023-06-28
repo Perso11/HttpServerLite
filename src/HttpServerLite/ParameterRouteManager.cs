@@ -74,6 +74,17 @@ namespace HttpServerLite
         }
 
         /// <summary>
+        /// Add a route.
+        /// </summary>
+        /// <param name="route"></param>
+        /// <exception cref="ArgumentNullException"></exception>
+        public void Add(ParameterRoute route) {
+            if(route == null) throw new ArgumentNullException(nameof(route));
+
+            Add(route.Method, route.Path, route.Handler);
+        }
+
+        /// <summary>
         /// Remove a route.
         /// </summary>
         /// <param name="method">The HTTP method.</param>

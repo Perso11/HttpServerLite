@@ -101,20 +101,13 @@ namespace Test.Ssl
 
 
                 Console.WriteLine("Starting reroute server");
-				Webserver httpsRewriteServer = new Webserver("localhost", _PortHttp, async (HttpContext ctx) => {
 
-					ctx.Response.Headers["Location"] = $"https://localhost:{_PortHttps}{ctx.Request.Url.Full}";
-					ctx.Response.StatusCode = 308;
-					await ctx.Response.SendAsync(0);
-					return;
-				});
-				httpsRewriteServer.Events.Logger = Console.WriteLine;
-				httpsRewriteServer.Settings.Debug.Responses = true;
-				httpsRewriteServer.Settings.Debug.Routing = true;
-				httpsRewriteServer.Settings.Debug.Requests = true;
-				httpsRewriteServer.Settings.Debug.Connections = true;
-				httpsRewriteServer.Settings.Debug.Tcp = true;
-				httpsRewriteServer.Start(false);
+				WebRerouteServer httpsRewriteServer = new WebRerouteServer("localhost", _PortHttp, _Server.Settings.Headers.Host) {
+					EventsLogger = Console.WriteLine
+				};
+				httpsRewriteServer.DebugSettings.EnableAll();
+				httpsRewriteServer.Start();
+
 			}
         }
 

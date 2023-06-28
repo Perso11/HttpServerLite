@@ -52,12 +52,29 @@ namespace HttpServerLite
             Add(r);
         }
 
-        /// <summary>
-        /// Remove a route.
-        /// </summary>
-        /// <param name="method">The HTTP method.</param>
-        /// <param name="path">URL path.</param>
-        public void Remove(HttpMethod method, string path)
+
+		public void Add(StaticRoute route) {
+			if (route == null) throw new ArgumentNullException(nameof(route));
+
+			route.Path = route.Path.ToLower();
+			if (!route.Path.StartsWith("/")) route.Path = "/" + route.Path;
+			if (!route.Path.EndsWith("/")) route.Path = route.Path + "/";
+
+			if (Exists(route.Method, route.Path)) {
+				return;
+			}
+
+			lock (_Lock) {
+				_Routes.Add(route);
+			}
+		}
+
+		/// <summary>
+		/// Remove a route.
+		/// </summary>
+		/// <param name="method">The HTTP method.</param>
+		/// <param name="path">URL path.</param>
+		public void Remove(HttpMethod method, string path)
         {
             if (String.IsNullOrEmpty(path)) throw new ArgumentNullException(nameof(path));
 
@@ -174,25 +191,6 @@ namespace HttpServerLite
         #endregion
 
         #region Private-Methods
-
-        private void Add(StaticRoute route)
-        {
-            if (route == null) throw new ArgumentNullException(nameof(route));
-
-            route.Path = route.Path.ToLower();
-            if (!route.Path.StartsWith("/")) route.Path = "/" + route.Path;
-            if (!route.Path.EndsWith("/")) route.Path = route.Path + "/";
-             
-            if (Exists(route.Method, route.Path))
-            { 
-                return;
-            }
-
-            lock (_Lock)
-            {
-                _Routes.Add(route); 
-            }
-        }
 
         private void Remove(StaticRoute route)
         {

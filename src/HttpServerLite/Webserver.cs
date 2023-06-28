@@ -271,11 +271,11 @@ namespace HttpServerLite
 
             Events.HandleServerStarted(this, EventArgs.Empty);
         }
-         
-        /// <summary>
-        /// Stop accepting new connections.
-        /// </summary>
-        public void Stop()
+
+		/// <summary>
+		/// Stop accepting new connections.
+		/// </summary>
+		public void Stop()
         {
             if (_TcpServer == null) throw new ObjectDisposedException("Webserver has been disposed.");
             if (!_TcpServer.IsListening) throw new InvalidOperationException("Webserver is already stopped.");
@@ -486,15 +486,15 @@ namespace HttpServerLite
                     args.Client.Guid,
                     preReadLen,
                     _Token).ConfigureAwait(false);
-
+                
                 if (preReadResult.Status != ReadResultStatus.Success
                     || preReadResult.BytesRead != preReadLen
                     || preReadResult.Data == null
                     || preReadResult.Data.Length != preReadLen) return;
+                
+				sb.Append(Encoding.ASCII.GetString(preReadResult.Data));
 
-                sb.Append(Encoding.ASCII.GetString(preReadResult.Data));
-
-                bool retrievingHeaders = true;
+				bool retrievingHeaders = true;
                 while (retrievingHeaders)
                 {
                     if (sb.ToString().EndsWith("\r\n\r\n"))
@@ -507,7 +507,7 @@ namespace HttpServerLite
                         {
                             _Events.HandleConnectionDenied(this, new ConnectionEventArgs(ip, port));
                             _Events.Logger?.Invoke(_Header + "failed to read headers from " + ip + ":" + port + " within " + _Settings.IO.MaxIncomingHeadersSize + " bytes, closing connection");
-                            return;
+							return;
                         }
 
                         ReadResult addlReadResult = await _TcpServer.ReadWithTimeoutAsync(
@@ -516,22 +516,22 @@ namespace HttpServerLite
                             1,
                             _Token).ConfigureAwait(false);
 
-                        if (addlReadResult.Status == ReadResultStatus.Success)
+						if (addlReadResult.Status == ReadResultStatus.Success)
                         {
                             sb.Append(Encoding.ASCII.GetString(addlReadResult.Data));
                         }
-                        else
-                        {
-                            return;
+                        else {
+							return;
                         }
                     }
                 }
 
-                #endregion
 
-                #region Build-Context
+				#endregion
 
-                ctx = new HttpContext(
+				#region Build-Context
+
+				ctx = new HttpContext(
                     ipPort,
                     _TcpServer.GetStream(args.Client.Guid),
                     sb.ToString(),
@@ -716,7 +716,12 @@ namespace HttpServerLite
                 {
                     ctx.Response.StatusCode = 500;
                     ctx.Response.ContentType = _Pages.Default500Page.ContentType;
-                    await ctx.Response.SendAsync(_Pages.Default500Page.Content, _Token).ConfigureAwait(false);
+                    try {
+                        await ctx.Response.SendAsync(_Pages.Default500Page.Content, _Token).ConfigureAwait(false);
+
+                    } catch (Exception e2){
+                        _Events.HandleException(this, new ExceptionEventArgs(ctx, e2));
+                    }
 
                     _Events.HandleException(this, new ExceptionEventArgs(ctx, e));
                 }

@@ -410,7 +410,31 @@ namespace HttpServerLite
             {
 
             }
-        }
+
+
+			/// <summary>
+			/// Enable or disable all debug logging.
+			/// </summary>
+			/// <param name="value"></param>
+			public void SetAll(bool value) {
+				AccessControl = value;
+				Routing = value;
+				Connections = value;
+				Tcp = value;
+				Requests = value;
+				Responses = value;
+			}
+
+			/// <summary>
+			/// Enable all debug logging.
+			/// </summary>
+			public void EnableAll() => SetAll(true);
+
+			/// <summary>
+			/// Disable all debug logging.
+			/// </summary>
+			public void DisableAll() => SetAll(false);
+		}
 
         #endregion
     }

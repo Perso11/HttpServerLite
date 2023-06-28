@@ -65,6 +65,17 @@ namespace HttpServerLite
                 handler);
         }
 
+		/// <summary>
+		/// Add a route.
+		/// </summary>
+		/// <param name="route"></param>
+		/// <exception cref="ArgumentNullException"></exception>
+		public void Add(DynamicRoute route) {
+            if (route == null) throw new ArgumentNullException(nameof(route));
+
+            Add(route.Method, route.Path, route.Handler);
+        }
+
         /// <summary>
         /// Remove a route.
         /// </summary>

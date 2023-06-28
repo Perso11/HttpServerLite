@@ -140,6 +140,13 @@
             <param name="path">URL path, i.e. /path/to/resource.</param>
             <param name="isDirectory">True if the path represents a directory.</param>
         </member>
+        <member name="M:HttpServerLite.ContentRouteManager.Add(HttpServerLite.ContentRoute)">
+            <summary>
+            Add a route.
+            </summary>
+            <param name="route"></param>
+            <exception cref="T:System.ArgumentNullException"></exception>
+        </member>
         <member name="M:HttpServerLite.ContentRouteManager.Remove(System.String)">
             <summary>
             Remove a route.
@@ -253,6 +260,13 @@
             <param name="method">The HTTP method.</param>
             <param name="path">URL path, i.e. /path/to/resource.</param>
             <param name="handler">Method to invoke.</param>
+        </member>
+        <member name="M:HttpServerLite.DynamicRouteManager.Add(HttpServerLite.DynamicRoute)">
+            <summary>
+            Add a route.
+            </summary>
+            <param name="route"></param>
+            <exception cref="T:System.ArgumentNullException"></exception>
         </member>
         <member name="M:HttpServerLite.DynamicRouteManager.Remove(HttpServerLite.HttpMethod,System.Text.RegularExpressions.Regex)">
             <summary>
@@ -522,6 +536,8 @@
         <member name="P:HttpServerLite.HttpRequest.DataAsString">
             <summary>
             Retrieve the request body as a string.  This will fully read the stream.
+            <br></br>
+            This method end at the end of the stream ! !
             </summary>
         </member>
         <member name="M:HttpServerLite.HttpRequest.#ctor">
@@ -1067,6 +1083,13 @@
             <param name="path">URL path, i.e. /path/to/resource.</param>
             <param name="handler">Method to invoke.</param>
         </member>
+        <member name="M:HttpServerLite.ParameterRouteManager.Add(HttpServerLite.ParameterRoute)">
+            <summary>
+            Add a route.
+            </summary>
+            <param name="route"></param>
+            <exception cref="T:System.ArgumentNullException"></exception>
+        </member>
         <member name="M:HttpServerLite.ParameterRouteManager.Remove(HttpServerLite.HttpMethod,System.String)">
             <summary>
             Remove a route.
@@ -1363,6 +1386,45 @@
             <param name="path">URL path.</param>
             <returns>Method to invoke.</returns>
         </member>
+        <member name="T:HttpServerLite.WebRerouteServer">
+            <summary>
+            A simple webserver that redirects all requests to a single URL
+            </summary>
+        </member>
+        <member name="T:HttpServerLite.WebRerouteServer.RedirectionTypes">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:HttpServerLite.WebRerouteServer.DebugSettings">
+            <summary>
+            Access to the server's debug settings
+            </summary>
+        </member>
+        <member name="P:HttpServerLite.WebRerouteServer.EventsLogger">
+            <summary>
+            Access to the server's event settings
+            </summary>
+        </member>
+        <member name="M:HttpServerLite.WebRerouteServer.#ctor(System.String,System.Int32,System.String,System.Security.Cryptography.X509Certificates.X509Certificate2)">
+            <summary>
+            
+            </summary>
+            <param name="hostname">The listening hostname</param>
+            <param name="port">the listening port</param>
+            <param name="redirectBaseUrl">the base URL that will be redirected</param>
+            <param name="sslCertificate">Can add a ssl layer</param>
+        </member>
+        <member name="M:HttpServerLite.WebRerouteServer.Start">
+            <summary>
+            Start the redirection
+            </summary>
+        </member>
+        <member name="M:HttpServerLite.WebRerouteServer.Stop">
+            <summary>
+            Stop the redirection
+            </summary>
+        </member>
         <member name="T:HttpServerLite.Webserver">
             <summary>
             HttpServerLite web server.
@@ -1451,7 +1513,7 @@
             Do not use the object after disposal.
             </summary>
         </member>
-        <member name="M:HttpServerLite.Webserver.Start">
+        <member name="M:HttpServerLite.Webserver.Start(System.Boolean)">
             <summary>
             Start accepting new connections.
             </summary>
@@ -1879,6 +1941,22 @@
             <summary>
             Instantiate the object.
             </summary> 
+        </member>
+        <member name="M:HttpServerLite.WebserverSettings.DebugSettings.SetAll(System.Boolean)">
+            <summary>
+            Enable or disable all debug logging.
+            </summary>
+            <param name="value"></param>
+        </member>
+        <member name="M:HttpServerLite.WebserverSettings.DebugSettings.EnableAll">
+            <summary>
+            Enable all debug logging.
+            </summary>
+        </member>
+        <member name="M:HttpServerLite.WebserverSettings.DebugSettings.DisableAll">
+            <summary>
+            Disable all debug logging.
+            </summary>
         </member>
         <member name="T:HttpServerLite.WebserverStatistics">
             <summary>
